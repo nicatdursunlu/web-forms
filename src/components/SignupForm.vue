@@ -1,10 +1,11 @@
 <template>
-  <form>
+  <form @submit.prevent="handleSubmit">
     <label>Email</label>
     <input type="email" required v-model="email" />
 
     <label>Password</label>
     <input type="password" required v-model="password" />
+    <div v-if="passwordError" class="error">{{ passwordError }}</div>
 
     <label>Role:</label>
     <select v-model="role">
@@ -20,8 +21,12 @@
     </div>
 
     <div class="terms">
-      <input v-model="terms" type="checkbox" required />
-      <label>Accept terms and conditions</label>
+      <input id="terms" v-model="terms" type="checkbox" required />
+      <label for="terms">Accept terms and conditions</label>
+    </div>
+
+    <div class="submit">
+      <button>Create an Account</button>
     </div>
 
     <!-- array of checkboxes -->
@@ -38,10 +43,6 @@
       <label>Mario</label>
     </div> -->
   </form>
-
-  <p>Email: {{ email }}</p>
-  <p>Password {{ password }}</p>
-  <p>Role: {{ role }}</p>
 </template>
 
 <script>
@@ -54,6 +55,7 @@ export default {
       terms: false,
       tempSkill: "",
       skills: [],
+      passwordError: "",
     };
   },
   methods: {
@@ -69,6 +71,19 @@ export default {
       this.skills = this.skills.filter((item) => {
         return skill !== item;
       });
+    },
+    handleSubmit() {
+      this.passwordError =
+        this.password.length > 7
+          ? ""
+          : "Password must be at least 8 chars long";
+      if (!this.passwordError) {
+        console.log("email", this.email);
+        console.log("password", this.password);
+        console.log("role", this.role);
+        console.log("skills", this.skills);
+        console.log("terms", this.terms);
+      }
     },
   },
 };
@@ -120,5 +135,25 @@ input[type="checkbox"] {
   font-weight: bold;
   color: #777;
   cursor: pointer;
+}
+.submit {
+  text-align: center;
+}
+button {
+  background-color: #0b6dff;
+  border: 0;
+  padding: 10px 20px;
+  margin-top: 20px;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  font-size: 16px;
+}
+.error {
+  color: #ff0062;
+  margin-top: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 </style>
